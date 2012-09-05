@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 
-#include "Util_Misc.h"
-#include "BeanLengthCheck.h"
+#include "Util_misc.h"
 #include "Configurable.h"
 
 #include <strsafe.h>
