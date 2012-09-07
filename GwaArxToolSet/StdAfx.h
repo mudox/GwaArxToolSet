@@ -94,6 +94,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/minmax_element.hpp>
 #include <boost/bind.hpp>
+#include <boost/static_assert.hpp>
 
 //#############################################################################
 //#############################################################################

@@ -29,7 +29,7 @@
 *.tlh
 *.tmp
 *.vspscc
-.builds
+*.builds
 *.dotCover
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
@@ -121,3 +121,14 @@ pip-log.txt
 
 # Mudox Added
 GwaArxToolSet/ArxBoostDbg/
+arxboostdbg/
+release/
+debug/
+
+*/release/
+*/arxboostdbg/
+*/debug/
+*.swp
+
+.gitignore~
+.Readme.md~
