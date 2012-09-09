@@ -95,6 +95,7 @@
 #include <boost/algorithm/minmax_element.hpp>
 #include <boost/bind.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/ref.hpp>
 
 //#############################################################################
 //#############################################################################

@@ -108,8 +108,8 @@ namespace
 		case RTCAN:
 			throw UserCanceled();	
 		default:
-			xssert(!"should not be there!");
-			throw std::runtime_error("should not be there!");
+			xssert(!"should not got here!");
+			throw std::runtime_error("should not got here!");
 		}
 
 		return std::ceil(hw);		

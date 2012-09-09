@@ -10,23 +10,6 @@ namespace GwaArx
 	{
 		namespace _aced_get
 		{
-			class CAcEdGetBase
-			{
-
-			};
-
-			class CAcEdSSGetBase : public CAcEdGetBase
-			{
-			protected:
-				virtual ~CAcEdSSGetBase();
-
-			protected:
-				virtual AcDbObjectId Run( void ) = 0;
-
-			protected:
-				struct resbuf * m_rb;
-			};
-
 			/****************************************************************
 			type argument [SentryFunc]:
 			1. must be a callable type with a signature: 
@@ -122,7 +105,42 @@ namespace GwaArx
 					return sp;
 				}				
 			}
+			
+			typedef boost::shared_ptr<struct resbuf> resbuf_sp;
+			resbuf_sp makeResbufShared( struct resbuf * rb );			
 
+			class CAcEdSSGet
+			{
+			public:
+				typedef boost::function<bool( ads_name )> sentry_type;
+				//constructors
+			public:
+				CAcEdSSGet();			
+
+			public:				
+				CAcEdSSGet & setPrompt	( const std::wstring & prompt );
+				CAcEdSSGet & setStr		( const std::wstring & str );
+				CAcEdSSGet & setPt1		( void * pt1 );				
+				CAcEdSSGet & setPt2		( void * pt2 );				
+				CAcEdSSGet & setFilter	( struct resbuf * filter );
+				CAcEdSSGet & setSS		( ads_name ss );
+				CAcEdSSGet & setSentry	( sentry_type sentry);
+
+			public:
+				
+
+			public:
+				void operator() ( ads_name *pSS = NULL );
+
+			private:
+				std::wstring	m_prompt;
+				std::wstring	m_str;
+				void			*m_pt1;
+				void			*m_pt2;
+				struct resbuf	*m_filter;
+				ads_name		m_ss;
+				sentry_type		m_sentry;
+			};				
 		} // namespace _aced_get
 	} // namespace Util
 } // namespace GwaArx

@@ -128,6 +128,8 @@ debug/
 */release/
 */arxboostdbg/
 */debug/
+
+*~
 *.swp
 
 .gitignore~

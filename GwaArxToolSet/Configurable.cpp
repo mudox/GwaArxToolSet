@@ -51,7 +51,7 @@ unsigned GwaArx::Configurations::CGwaDataSheet::LappingLength_46D( unsigned barD
 	case 40:
 		return 1850;		
 	default:
-		throw std::runtime_error("LappingLength_46D()  should not get there");
+		throw std::runtime_error("LappingLength_46D() - should not got here");
 	}
 }
 
