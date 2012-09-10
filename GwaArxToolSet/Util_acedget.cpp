@@ -112,5 +112,5 @@ void GwaArx::Util::_aced_get::CAcEdSSGet::operator()( ads_name *pSS /*= NULL*/ )
 
 GwaArx::Util::_aced_get::resbuf_sp GwaArx::Util::_aced_get::makeResbufShared( struct resbuf * rb )
 {
-	return shared_ptr<struct resbuf>(rb, ::acutRelRb);
+	return boost::shared_ptr<struct resbuf>(rb, ::acutRelRb);
 }

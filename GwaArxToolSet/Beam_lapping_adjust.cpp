@@ -115,17 +115,141 @@ namespace
 
 	void _caseOnlyDim( rc_sp spRC, dim_sp spDim )
 	{
-		#pragma message ("unimplemented!")
+		using namespace GwaArx::Configurations;
+
+		AcGePoint3d pt1 = spDim->xLine1Point();
+		AcGePoint3d pt2 = spDim->xLine2Point();
+		AcGePoint3d ptRC = spRC->entityPtr()->position();
+					
+
+		AcGePoint3d *pNearPt = NULL, *pFarPt = NULL;
+		double dist1 = ptRC.distanceTo(pt1);
+		double dist2 = ptRC.distanceTo(pt2);
+		if (dist1 < dist2)
+		{
+			pNearPt = &pt1;
+			pFarPt = &pt2;
+		}
+		else
+		{
+			pNearPt = &pt2;
+			pFarPt = &pt1;
+		}		
+
+		unsigned lappingLen = CGwaDataSheet::LappingLength_46D(spRC->minmaxBarDia().first);
+
+		AcGeMatrix3d mat;
+		AcGeVector3d vecZ(0, 0, 1);
+		AcGeVector3d vecX = (*pFarPt - *pNearPt).normalize();
+		AcGeVector3d vecY = vecZ.crossProduct(vecX);
+		mat.setCoordSystem(*pNearPt, vecX, vecY, vecZ);		
+
+		mat.invert();
+ 		pt1.transformBy(mat);
+ 		pt2.transformBy(mat);		
+
+		pFarPt->x = lappingLen;
+
+		mat.invert();
+		pt1.transformBy(mat);
+		pt2.transformBy(mat);
+
+		ret_eOk(spDim->upgradeOpen());
+		spDim->setXLine1Point(pt1);
+		spDim->setXLine2Point(pt2);
 	}
 	
-	void _caseOnly4Bars( rc_sp rcRC, bar_sp_vec vecBars )
+	void _caseOnlyLappingBar( rc_sp spRC, bar_sp_vec vecBars )
 	{
-		#pragma message ("unimplemented!")
+		using namespace GwaArx::Configurations;
+
+		bar_sp spBar = vecBars[0];
+
+		AcGePoint3d pt1 = spBar->startPoint();
+		AcGePoint3d pt2 = spBar->endPoint();
+		AcGePoint3d ptRC = spRC->entityPtr()->position();
+
+		AcGePoint3d *pNearPt = NULL, *pFarPt = NULL;
+		double dist1 = ptRC.distanceTo(pt1);
+		double dist2 = ptRC.distanceTo(pt2);
+		if (dist1 < dist2)
+		{
+			pNearPt = &pt1;
+			pFarPt = &pt2;
+		}
+		else
+		{
+			pNearPt = &pt2;
+			pFarPt = &pt1;
+		}		
+
+		unsigned lappingLen = CGwaDataSheet::LappingLength_46D(spRC->minmaxBarDia().first);
+
+		AcGeMatrix3d mat;
+		AcGeVector3d vecZ(0, 0, 1);
+		AcGeVector3d vecX = (*pFarPt - *pNearPt).normalize();
+		AcGeVector3d vecY = vecZ.crossProduct(vecX);
+		mat.setCoordSystem(*pNearPt, vecX, vecY, vecZ);		
+
+		mat.invert();
+		pt1.transformBy(mat);
+		pt2.transformBy(mat);		
+
+		pFarPt->x = lappingLen;
+
+		mat.invert();
+		pt1.transformBy(mat);
+		pt2.transformBy(mat);
+
+		ret_eOk(spBar->upgradeOpen());
+		spBar->setStartPoint(pt1);
+		spBar->setEndPoint(pt2);
 	}
 	
 	void _caseBoth( rc_sp spRC, dim_sp spDim, bar_sp_vec vecBars )
 	{
-		#pragma message ("unimplemented!")
+		using namespace GwaArx::Configurations;
+
+		AcGePoint3d pt1 = spDim->xLine1Point();
+		AcGePoint3d pt2 = spDim->xLine2Point();
+		AcGePoint3d ptRC = spRC->entityPtr()->position();
+
+
+		AcGePoint3d *pNearPt = NULL, *pFarPt = NULL;
+		double dist1 = ptRC.distanceTo(pt1);
+		double dist2 = ptRC.distanceTo(pt2);
+		if (dist1 < dist2)
+		{
+			pNearPt = &pt1;
+			pFarPt = &pt2;
+		}
+		else
+		{
+			pNearPt = &pt2;
+			pFarPt = &pt1;
+		}		
+
+		unsigned lappingLen = CGwaDataSheet::LappingLength_46D(spRC->minmaxBarDia().first);
+
+		AcGeMatrix3d mat;
+		AcGeVector3d vecZ(0, 0, 1);
+		AcGeVector3d vecX = (*pFarPt - *pNearPt).normalize();
+		AcGeVector3d vecY = vecZ.crossProduct(vecX);
+		mat.setCoordSystem(*pNearPt, vecX, vecY, vecZ);		
+
+		mat.invert();
+		pt1.transformBy(mat);
+		pt2.transformBy(mat);		
+
+		pFarPt->x = lappingLen;
+
+		mat.invert();
+		pt1.transformBy(mat);
+		pt2.transformBy(mat);
+
+		ret_eOk(spDim->upgradeOpen());
+		spDim->setXLine1Point(pt1);
+		spDim->setXLine2Point(pt2);
 	}
 
 }
@@ -141,7 +265,7 @@ void GwaArx::Beam::_lapping_adjust::cmdLappingAdjust( void )
 	switch(_getInput(spRC, spDim, vecBars))
 	{
 	case onlyLappingLine:
-		_caseOnly4Bars(spRC, vecBars);
+		_caseOnlyLappingBar(spRC, vecBars);
 		break;
 	case onlyDim:
 		_caseOnlyDim(spRC, spDim);
