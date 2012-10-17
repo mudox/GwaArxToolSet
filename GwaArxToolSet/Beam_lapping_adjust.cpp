@@ -9,10 +9,12 @@ namespace
 {
 	enum sel_type { invalidSelType, onlyLappingLine, onlyDim, both };
 
-	typedef	GwaArx::TextPatterns::CPatMainBar::shared_ptr_type rc_sp;
-	typedef boost::shared_ptr<AcDbRotatedDimension> dim_sp;
-	typedef boost::shared_ptr<AcDbLine> bar_sp;
-	typedef std::vector<bar_sp> bar_sp_vec;
+	typedef	GwaArx::TextPatterns::CPatMainBar::shared_ptr_type		rc_sp;
+	typedef boost::shared_ptr<AcDbRotatedDimension> 				dim_sp;
+	typedef boost::shared_ptr<AcDbLine>								bar_sp;
+	typedef std::vector<bar_sp>										bar_sp_vec;
+	typedef boost::shared_ptr<AcGeLineSeg3d>						seg_sp;
+	typedef std::vector<seg_sp>										seg_sp_vec;
 
 	bool _ssSentry( ads_name ss, sel_type & selType, dim_sp & spDim, bar_sp_vec & vecBars )
 	{
@@ -119,8 +121,7 @@ namespace
 
 		AcGePoint3d pt1 = spDim->xLine1Point();
 		AcGePoint3d pt2 = spDim->xLine2Point();
-		AcGePoint3d ptRC = spRC->entityPtr()->position();
-					
+		AcGePoint3d ptRC = spRC->entityPtr()->position();					
 
 		AcGePoint3d *pNearPt = NULL, *pFarPt = NULL;
 		double dist1 = ptRC.distanceTo(pt1);
@@ -142,15 +143,13 @@ namespace
 		AcGeVector3d vecZ(0, 0, 1);
 		AcGeVector3d vecX = (*pFarPt - *pNearPt).normalize();
 		AcGeVector3d vecY = vecZ.crossProduct(vecX);
-		mat.setCoordSystem(*pNearPt, vecX, vecY, vecZ);		
 
-		mat.invert();
- 		pt1.transformBy(mat);
- 		pt2.transformBy(mat);		
+		mat.setCoordSystem(*pNearPt, vecX, vecY, vecZ);
 
-		pFarPt->x = lappingLen;
-
-		mat.invert();
+		pt1.x = pt1.y = pt1.z = 0;
+		pt2.x = lappingLen;
+		pt2.y = pt2.z = 0;
+		
 		pt1.transformBy(mat);
 		pt2.transformBy(mat);
 
@@ -189,15 +188,13 @@ namespace
 		AcGeVector3d vecZ(0, 0, 1);
 		AcGeVector3d vecX = (*pFarPt - *pNearPt).normalize();
 		AcGeVector3d vecY = vecZ.crossProduct(vecX);
-		mat.setCoordSystem(*pNearPt, vecX, vecY, vecZ);		
 
-		mat.invert();
-		pt1.transformBy(mat);
-		pt2.transformBy(mat);		
+		mat.setCoordSystem(*pNearPt, vecX, vecY, vecZ);			
 
-		pFarPt->x = lappingLen;
-
-		mat.invert();
+		pt1.x = pt1.y = pt1.z = 0;
+		pt2.x = lappingLen;
+		pt2.y = pt2.z = 0;
+		
 		pt1.transformBy(mat);
 		pt2.transformBy(mat);
 
@@ -205,55 +202,213 @@ namespace
 		spBar->setStartPoint(pt1);
 		spBar->setEndPoint(pt2);
 	}
-	
-	void _caseBoth( rc_sp spRC, dim_sp spDim, bar_sp_vec vecBars )
+
+	inline void _wiw4Segs(bar_sp_vec &vec4Bars, seg_sp &obliqueSeg, seg_sp &droppedSeg,
+		seg_sp &smallerSeg, seg_sp &biggerSeg)
 	{
 		using namespace GwaArx::Configurations;
+		using namespace boost;
+		using namespace boost::assign;
+		using namespace std;
 
-		AcGePoint3d pt1 = spDim->xLine1Point();
-		AcGePoint3d pt2 = spDim->xLine2Point();
-		AcGePoint3d ptRC = spRC->entityPtr()->position();
+		// figure out who is who among the 4 bars.
 
-
-		AcGePoint3d *pNearPt = NULL, *pFarPt = NULL;
-		double dist1 = ptRC.distanceTo(pt1);
-		double dist2 = ptRC.distanceTo(pt2);
-		if (dist1 < dist2)
+		xssert(4 == vec4Bars.size());
+		vector<seg_sp> vec4Segs;
+		for (int i = 0; i != 4; ++i)
 		{
-			pNearPt = &pt1;
-			pFarPt = &pt2;
+			vec4Segs.push_back(make_shared<AcGeLineSeg3d>(
+				vec4Bars[i]->startPoint(), vec4Bars[i]->endPoint()));
+		}
+
+		// pick out the oblique line segment out of the vec.		
+		for (int i = 0; i != 4; ++i)
+		{
+			seg_sp prev, next, cur;
+			cur = vec4Segs[i];
+			prev = vec4Segs[(i - 1 + 4) % 4];
+			next = vec4Segs[(i + 1) % 4];
+			xssert(prev);
+			xssert(next);
+
+			if (!(cur->isParallelTo(*prev)) && !(cur->isParallelTo(*next)))
+			{
+				obliqueSeg = vec4Segs[i];
+				// remove the oblique one.
+				vec4Segs.erase(vec4Segs.begin() + i);
+				break;
+			}						
+		}
+
+		if (!(3 == vec4Segs.size()))
+		{
+			throw std::runtime_error("can not identify oblique line");
+		}
+
+		// pick out the dropped line segment out of the vec.		
+		for (int i = 0; i != 3; ++i)
+		{
+			seg_sp prev, next, cur;
+			cur = vec4Segs[i];
+			prev = vec4Segs[(i - 1 + 3) % 3];
+			next = vec4Segs[(i + 1)% 3];
+			xssert(prev);
+			xssert(next);
+			
+			if ((!cur->isColinearTo(*next)) && (!cur->isColinearTo(*prev)))			
+			{
+				droppedSeg = vec4Segs[i];
+				// remove the dropped one.
+				vec4Segs.erase(vec4Segs.begin() + i);
+				break;
+			}					
+		}
+
+		if (!(2 == vec4Segs.size()))
+		{
+			throw std::runtime_error("can not identity dropped line");
+		}
+
+		// which is the smaller bar, and which is the bigger bar.
+		smallerSeg = vec4Segs[0];
+		biggerSeg = vec4Segs[1];
+		AcGePoint3d crossingPoint;
+		smallerSeg->intersectWith(*obliqueSeg, crossingPoint);
+		if (!(smallerSeg->isOn(crossingPoint)))
+		{
+			std::swap(smallerSeg, biggerSeg);
+		}		
+	}
+
+	void _caseBoth( rc_sp spRC, dim_sp spDim, bar_sp_vec vec4Bars )
+	{
+		xssert(4 == vec4Bars.size());		
+
+		using namespace GwaArx::Configurations;
+		using namespace boost;
+		using namespace boost::assign;
+		using namespace std;		
+
+		// adjust dimension first.
+		_caseOnlyDim(spRC, spDim);	
+
+		seg_sp theOblique;
+		seg_sp theDropped;
+		seg_sp theSmaller;
+		seg_sp theBigger;
+
+		_wiw4Segs(vec4Bars, theOblique, theDropped, theSmaller, theBigger);
+		xssert(theOblique && theDropped && theSmaller && theBigger);
+
+		// build transformation matrix	
+		
+		// get xAxis.
+		AcGeVector3d xAxis;		
+		if ( 
+			theBigger->startPoint().distanceTo(theOblique->midPoint())
+			< theBigger->endPoint().distanceTo((theOblique->midPoint()))
+			)
+		{			
+			xAxis = theBigger->endPoint() - theBigger->startPoint();
 		}
 		else
 		{
-			pNearPt = &pt2;
-			pFarPt = &pt1;
-		}		
+			xAxis = theBigger->startPoint() - theBigger->endPoint();
+		}			
+		
+		// get origin and yAxis.
+		AcGePoint3d origin;
+		AcGeVector3d yAxis;
+		if (
+			spDim->xLine1Point().distanceTo(theOblique->midPoint())
+			< spDim->xLine2Point().distanceTo(theOblique->midPoint())
+			)
+		{
+			origin = theBigger->closestPointTo(spDim->xLine1Point());
+			yAxis =  spDim->xLine1Point() - origin; 
+		}
+		else
+		{
+			origin = theBigger->closestPointTo(spDim->xLine2Point());
+			yAxis = spDim->xLine2Point() - origin;
+		}
 
-		unsigned lappingLen = CGwaDataSheet::LappingLength_46D(spRC->minmaxBarDia().first);
+		// zAxis
+		AcGeVector3d zAxis = xAxis.crossProduct(yAxis);
 
-		AcGeMatrix3d mat;
-		AcGeVector3d vecZ(0, 0, 1);
-		AcGeVector3d vecX = (*pFarPt - *pNearPt).normalize();
-		AcGeVector3d vecY = vecZ.crossProduct(vecX);
-		mat.setCoordSystem(*pNearPt, vecX, vecY, vecZ);		
+		AcGeMatrix3d trans_mat;
+		xAxis.normalize();
+		yAxis.normalize();
+		zAxis.normalize();
+		trans_mat.setCoordSystem(origin, xAxis, yAxis, zAxis);
 
-		mat.invert();
-		pt1.transformBy(mat);
-		pt2.transformBy(mat);		
+		//		for test
+		// 		trans_mat.invert();
+		// 		theBigger->transformBy(trans_mat);
+		// 		theSmaller->transformBy(trans_mat);
+		// 		theOblique->transformBy(trans_mat);
+		// 		theDropped->transformBy(trans_mat);		
 
-		pFarPt->x = lappingLen;
+		
+		// 		AcGePoint3d pt1 = theBigger->startPoint();
+		// 		AcGePoint3d pt2 = theBigger->endPoint();
+		// 		AcGePoint3d pt3 = theSmaller->startPoint();
+		// 		AcGePoint3d pt4 = theSmaller->endPoint();
+		// 		AcGePoint3d pt5 = theDropped->startPoint();
+		// 		AcGePoint3d pt6 = theDropped->endPoint();
+		
+	 	// build virtual layout.
+		// i.e. calculate virtual points.
+		double theBiggerLen = theBigger->length();
+		double theSmallerLen = theSmaller->length();
+		double theDroppedDepth = theBigger->distanceTo(*theDropped);
+		double theBiggerSmallerNetSapce = 
+			::abs(theBigger->midPoint().distanceTo(theSmaller->midPoint())) -
+			(theBiggerLen + theSmallerLen) / 2;
+		double theDroppedLen = spDim->xLine1Point().distanceTo(spDim->xLine2Point());
 
-		mat.invert();
-		pt1.transformBy(mat);
-		pt2.transformBy(mat);
+		theBigger = make_shared<AcGeLineSeg3d>(
+			AcGePoint3d(0, 0, 0),
+			AcGePoint3d(theBiggerLen, 0, 0)
+			);
 
-		ret_eOk(spDim->upgradeOpen());
-		spDim->setXLine1Point(pt1);
-		spDim->setXLine2Point(pt2);
+		theSmaller = make_shared<AcGeLineSeg3d>(
+			AcGePoint3d(-theBiggerSmallerNetSapce, 0, 0),
+			AcGePoint3d(-(theBiggerSmallerNetSapce + theSmallerLen), 0, 0)
+			);
+		
+		theDropped = make_shared<AcGeLineSeg3d>(
+			AcGePoint3d(0, -theDroppedDepth, 0),
+			AcGePoint3d(theDroppedLen, -theDroppedDepth, 0)
+			);
+
+		theOblique = make_shared<AcGeLineSeg3d>(
+			AcGePoint3d(-theBiggerSmallerNetSapce, 0, 0),
+			AcGePoint3d(0, -theDroppedDepth, 0)
+			);
+
+		// transform to WCS
+		theBigger->transformBy(trans_mat);
+		theSmaller->transformBy(trans_mat);		
+		theDropped->transformBy(trans_mat);
+		theOblique->transformBy(trans_mat);		
+		
+		// set the 4 lines
+		for (int i = 0; i != vec4Bars.size(); ++i)
+		{
+			ret_eOk(vec4Bars[i]->upgradeOpen());
+		}
+
+		vec4Bars[0]->setStartPoint(theBigger->startPoint());
+		vec4Bars[0]->setEndPoint(theBigger->endPoint());
+		vec4Bars[1]->setStartPoint(theSmaller->startPoint());
+		vec4Bars[1]->setEndPoint(theSmaller->endPoint());
+		vec4Bars[2]->setStartPoint(theDropped->startPoint());
+		vec4Bars[2]->setEndPoint(theDropped->endPoint());
+		vec4Bars[3]->setStartPoint(theOblique->startPoint());
+		vec4Bars[3]->setEndPoint(theOblique->endPoint());
 	}
-
 }
-
 
 void GwaArx::Beam::_lapping_adjust::cmdLappingAdjust( void )
 {

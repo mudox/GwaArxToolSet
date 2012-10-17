@@ -12,14 +12,14 @@ namespace GwaArx
 		{
 			/****************************************************************
 			type argument [SentryFunc]:
-			1. must be a callable type with a signature: 
-			[any_type] SentryFunc( const AcDbObjectId & )
-			3. where [any_type] can participate in bool context, e.g.
-			if(any_type), or if(!any_type) ...
-			to denote the SentryFunc invocation is successful or not.
-			4. if any_type is tested to be true, then [any_type] is returned 
-			by copy.
-			5. accepts only 1 argument of type "const AcDbObjectId &".
+				1. must be a callable type with a signature: 
+					[any_type] SentryFunc( const AcDbObjectId & )
+				3. where [any_type] can participate in bool context, e.g.
+					if(any_type), or if(!any_type) ...
+				to denote the SentryFunc invocation is successful or not.
+				4. if any_type is tested to be true, then [any_type] is returned 
+				by copy.
+				5. accepts only 1 argument of type "const AcDbObjectId &".
 			****************************************************************/
 			template<typename SentryFunc>
 			typename boost::result_of<SentryFunc(const AcDbObjectId &)>::type
@@ -84,13 +84,13 @@ namespace GwaArx
 			****************************************************************/
 			template<typename Wanted>
 			typename Wanted::shared_ptr_type acedPickA( 
-			ACHAR * szPrompt,								// prompt string
-			ads_point ptPick = NULL,						// pointer where user picked the object
+				ACHAR * szPrompt,								// prompt string
+				ads_point ptPick = NULL,						// pointer where user picked the object
 				boost::function<bool (typename Wanted::shared_ptr_type)> Pred	// default parameter
 				= boost::function<bool (typename Wanted::shared_ptr_type)>())	//  ¡ª¡ª a empty function object
 			{
 				typename Wanted::shared_ptr_type sp = acedPick(&typename Wanted::newInstance, szPrompt);
-			
+
 				if (!sp || Pred.empty())
 				{
 					return sp;

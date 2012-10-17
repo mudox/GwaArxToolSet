@@ -79,6 +79,8 @@
 #include <string>
 #include <set>
 #include <cassert>
+#include <algorithm>
+#include <iterator>
 
 //- boost
 #include <boost/xpressive/xpressive_static.hpp>
@@ -96,6 +98,7 @@
 #include <boost/bind.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/ref.hpp>
+#include <boost/assign.hpp>
 
 //#############################################################################
 //#############################################################################
