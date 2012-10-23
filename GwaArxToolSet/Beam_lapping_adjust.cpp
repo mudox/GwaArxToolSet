@@ -208,7 +208,7 @@ namespace
 	{
 		using namespace GwaArx::Configurations;
 		using namespace boost;
-		using namespace boost::assign;
+		//using namespace boost::assign;
 		using namespace std;
 
 		// figure out who is who among the 4 bars.
@@ -286,7 +286,6 @@ namespace
 
 		using namespace GwaArx::Configurations;
 		using namespace boost;
-		using namespace boost::assign;
 		using namespace std;		
 
 		// adjust dimension first.

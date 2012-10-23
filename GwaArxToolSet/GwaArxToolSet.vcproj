@@ -132,6 +132,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm155"
 				Optimization="2"
 				AdditionalUsingDirectories="C:\Program Files\AutoCAD 2008"
 				PreprocessorDefinitions="WIN32;_WINDOWS;GWAARXTOOLSET_MODULE;NDEBUG;_AFXEXT;_ACRXAPP"

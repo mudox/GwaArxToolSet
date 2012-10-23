@@ -27,14 +27,14 @@ namespace GwaArx
 
 				// fetch calculation results.
 			public:			
-				unsigned SpanLength( void ) const;
-				unsigned SupportHalfWidth( void ) const;
-				unsigned BarDiameter( void ) const;
+				unsigned spanLength( void ) const;
+				unsigned supportHalfWidth( void ) const;
+				unsigned barDiameter( void ) const;
 
-				unsigned Top0_25( void ) const;
-				unsigned Top0_15( void ) const;
-				unsigned Bottom0_08( void ) const;
-				unsigned Bottom0_15( void ) const;
+				unsigned retTop0_25( void ) const;
+				unsigned retTop0_15( void ) const;
+				unsigned retBottom0_08( void ) const;
+				unsigned retBottom0_15( void ) const;
 
 				// data members to hold input data.
 			private:

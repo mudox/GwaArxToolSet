@@ -72,22 +72,22 @@ public:
 
 public:
 
-	// ----- MDXGwaArxToolSet.ts command
-	static void MDXGwaArxToolSetts(void)
+	// ----- MDX_GwaArxToolSet_.ts command
+	static void MDX_GwaArxToolSet_ts(void)
 	{
 		GwaArx::Util::InvokeCmdImp(Test1);
 	}
 public:
 
-	// ----- MDXGwaArxToolSet.TZDJ command
-	static void MDXGwaArxToolSetTZDJ(void)
+	// ----- MDX_GwaArxToolSet_.TiaoZhengDaJie command
+	static void MDX_GwaArxToolSet_TiaoZhengDaJie(void)
 	{
 		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdLappingAdjust);
 	}
 public:
 
-	// - MDXGwaArxToolSet.YSLC command
-	static void MDXGwaArxToolSetYSLC(void)
+	// ----- MDX_GwaArxToolSet_.YanSuanLiangChang command
+	static void MDX_GwaArxToolSet_YanSuanLiangChang(void)
 	{
 		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdBeamLenChck);
 	}
@@ -96,6 +96,6 @@ public:
 //-----------------------------------------------------------------------------
 IMPLEMENT_ARX_ENTRYPOINT(CGwaArxToolSetApp)
 
-ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDXGwaArxToolSet, ts, ts, ACRX_CMD_TRANSPARENT | ACRX_CMD_USEPICKSET | ACRX_CMD_REDRAW, NULL)
-ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDXGwaArxToolSet, TZDJ, TZDJ, ACRX_CMD_TRANSPARENT | ACRX_CMD_USEPICKSET | ACRX_CMD_REDRAW, NULL)
-ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDXGwaArxToolSet, YSLC, YSLC, ACRX_CMD_TRANSPARENT, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, ts, ts, ACRX_CMD_TRANSPARENT | ACRX_CMD_USEPICKSET | ACRX_CMD_REDRAW, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, TiaoZhengDaJie, TiaoZhengDaJie, ACRX_CMD_TRANSPARENT | ACRX_CMD_USEPICKSET | ACRX_CMD_REDRAW, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, YanSuanLiangChang, YanSuanLiangChang, ACRX_CMD_TRANSPARENT, NULL) 

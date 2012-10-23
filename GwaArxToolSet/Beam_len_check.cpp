@@ -5,7 +5,7 @@
 #include "Text.h"
 #include "Beam.h"
 
-unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::Top0_25( void ) const
+unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::retTop0_25( void ) const
 {
 	unsigned ret = (std::ceil((m_SpanLength * 0.25 + m_SupportHalfWidth) / 100)) * 100;
 	unsigned _46d = GwaArx::Configurations::CGwaDataSheet::LappingLength_46D(m_BarDia);
@@ -13,7 +13,7 @@ unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::Top0_25( void ) const
 	return ret;
 }
 
-unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::Top0_15( void ) const
+unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::retTop0_15( void ) const
 {
 	unsigned ret = (std::ceil((m_SpanLength * 0.15 + m_SupportHalfWidth) / 100)) * 100;
 	unsigned _46d = GwaArx::Configurations::CGwaDataSheet::LappingLength_46D(m_BarDia);
@@ -21,13 +21,13 @@ unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::Top0_15( void ) const
 	return ret;
 }
 
-unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::Bottom0_08( void ) const
+unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::retBottom0_08( void ) const
 {
 	// round off to multiple of 100
 	return (int(m_SpanLength * 0.08) / 100) * 100;
 }
 
-unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::Bottom0_15( void ) const
+unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::retBottom0_15( void ) const
 {
 	// round off to multiple of 100
 	return (int(m_SpanLength * 0.15) / 100) * 100;	
@@ -127,30 +127,32 @@ GwaArx::Beam::_beam_length_check::CBeamCounter::acedNew( void )
 	return sp;
 }
 
-inline unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::SpanLength( void ) const
+inline unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::spanLength( void ) const
 {
 	return m_SpanLength;
 }
 
-unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::SupportHalfWidth( void ) const
+unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::supportHalfWidth( void ) const
 {
 	return m_SupportHalfWidth;
 }
 
-unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::BarDiameter( void ) const
+unsigned GwaArx::Beam::_beam_length_check::CBeamCounter::barDiameter( void ) const
 {
 	return m_BarDia;
 }
 
 void GwaArx::Beam::_beam_length_check::cmdBeamLenChck( void )
 {
-		
+	// the constructor of CBeamCounter will the dirty job, such as 
+	// asking for input, calculating the results.
+	
 	BOOST_AUTO(pBC, CBeamCounter::acedNew()); 
 
-	acutPrintf(TEXT("\n[span] = %-10d  [h.w.] = %-10d  [b.d.] = %d"),
-		pBC->SpanLength(), pBC->SupportHalfWidth(), pBC->BarDiameter());
-	acutPrintf(TEXT("\n[0.25] = %-10d  [0.15] = %-10d  [0.08] = %-10d  [0.15] = %d"),
-		pBC->Top0_25(), pBC->Top0_15(), pBC->Bottom0_08(), pBC->Bottom0_15());
+	acutPrintf(TEXT("\n[梁跨] = %-10d  [半制作] = %-10d  [钢筋直径] = %d"),
+		pBC->spanLength(), pBC->supportHalfWidth(), pBC->barDiameter());
+	acutPrintf(TEXT("\n[上 0.25] = %-10d  [上 0.15] = %-10d\n[下 0.15] = %-10d  [下 0.08] = %d"),
+		pBC->retTop0_25(), pBC->retTop0_15(), pBC->retBottom0_08(), pBC->retBottom0_15());
 }
 
 
