@@ -27,7 +27,7 @@ namespace GwaArx
 			{
 				using namespace GwaArx::Util;
 
-				// pull auto variables declarations out of loop body
+				// pull auto variables declarations out of loop body for performance consideration
 				ads_name sname;
 				ads_point pt;	
 				boost::shared_ptr<AcDbText> pObj;
@@ -79,7 +79,7 @@ namespace GwaArx
 				a empty Wanted::shared_ptr_type() denoting failure.
 				a valid Wanted::shared_ptr_type() denoting success.
 			type argument [Predicator]
-			1. as what it's named for, acts as a predicate.
+			1. just as its name implies, it acts as a predicate.
 			2. return true to denote "passed".
 			****************************************************************/
 			template<typename Wanted>

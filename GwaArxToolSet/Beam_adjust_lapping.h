@@ -6,9 +6,9 @@ namespace GwaArx
 {
 	namespace Beam
 	{
-		namespace _lapping_adjust
+		namespace _adjust_lapping
 		{
-			void cmdLappingAdjust( void );
+			void cmdAdjustLapping( void );
 		}
 	}
 }

@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 
-#include "Beam_lapping_adjust.h"
+#include "Beam_adjust_lapping.h"
 #include "Util.h"
 #include "Text.h"
 #include "Configurable.h"
@@ -316,19 +316,28 @@ namespace
 		}			
 		
 		// get origin and yAxis.
+		// the xLinePoint whichever is closer to the referencing RC Text
+		//+ is the 'key point' to locate the origin. 
+		// and then use the 'key point' to find out the closest point 
+		//+ on the line collinear to bigger bar or smaller bar. and that is
+		//+ the origin.
 		AcGePoint3d origin;
 		AcGeVector3d yAxis;
+		AcGeLine3d line;
+		AcGePoint3d textPos = spRC->entityPtr()->position();
 		if (
-			spDim->xLine1Point().distanceTo(theOblique->midPoint())
-			< spDim->xLine2Point().distanceTo(theOblique->midPoint())
+			spDim->xLine1Point().distanceTo(textPos)
+			< spDim->xLine2Point().distanceTo(textPos)
 			)
-		{
-			origin = theBigger->closestPointTo(spDim->xLine1Point());
+		{			
+			theBigger->getLine(line);
+			origin = line.closestPointTo(spDim->xLine1Point());
 			yAxis =  spDim->xLine1Point() - origin; 
 		}
 		else
-		{
-			origin = theBigger->closestPointTo(spDim->xLine2Point());
+		{	
+			theBigger->getLine(line);
+			origin = line.closestPointTo(spDim->xLine2Point());
 			yAxis = spDim->xLine2Point() - origin;
 		}
 
@@ -409,7 +418,7 @@ namespace
 	}
 }
 
-void GwaArx::Beam::_lapping_adjust::cmdLappingAdjust( void )
+void GwaArx::Beam::_adjust_lapping::cmdAdjustLapping( void )
 {
 	// prompt user to select objects
 	rc_sp spRC;

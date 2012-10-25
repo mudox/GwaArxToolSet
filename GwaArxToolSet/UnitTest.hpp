@@ -26,7 +26,7 @@ void Test1( void )
 	GwaArx::BeamClac::cmdBeamLenChck();
 	****************************************************************/
 
-	GwaArx::Beam::cmdLappingAdjust();
+	GwaArx::Beam::cmdAdjustLapping();
 	//Foo();
 	return;
 }

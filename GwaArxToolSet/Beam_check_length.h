@@ -6,9 +6,9 @@ namespace GwaArx
 {
 	namespace Beam
 	{
-		namespace _beam_length_check
+		namespace _check_length
 		{
-			void cmdBeamLenChck( void );		
+			void cmdCheckLength( void );		
 
 			class CBeamCounter
 			{

@@ -369,11 +369,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Beam_lapping_adjust(old).cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Beam_lapping_adjust.cpp"
+				RelativePath=".\Beam_adjust_lapping.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -404,15 +400,23 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Beam_lapping_adjust.h"
+				RelativePath=".\Beam_adjust_lapping.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Beam_len_check.cpp"
+				RelativePath=".\Beam_bend_bar.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Beam_len_check.h"
+				RelativePath=".\Beam_bend_bar.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Beam_check_length.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Beam_check_length.h"
 				>
 			</File>
 		</Filter>
@@ -435,14 +439,18 @@
 				RelativePath=".\GwaArxToolSet.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\GwaArxToolSet.rc"
+			<Filter
+				Name="Resource"
 				>
-			</File>
-			<File
-				RelativePath=".\Resource.h"
-				>
-			</File>
+				<File
+					RelativePath=".\GwaArxToolSet.rc"
+					>
+				</File>
+				<File
+					RelativePath=".\Resource.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Test"

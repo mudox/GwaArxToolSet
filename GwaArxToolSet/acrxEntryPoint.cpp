@@ -27,6 +27,7 @@
 
 #include "Util.h"
 #include "UnitTest.hpp"
+#include "Beam.h"
 
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("MDX")
@@ -69,33 +70,36 @@ public:
 	{
 
 	}
-
+// ++++++++++++++++++++++++++ ARX Commands ++++++++++++++++++++++++++++++++++++
 public:
-
 	// ----- MDX_GwaArxToolSet_.ts command
 	static void MDX_GwaArxToolSet_ts(void)
 	{
 		GwaArx::Util::InvokeCmdImp(Test1);
 	}
-public:
 
 	// ----- MDX_GwaArxToolSet_.TiaoZhengDaJie command
 	static void MDX_GwaArxToolSet_TiaoZhengDaJie(void)
 	{
-		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdLappingAdjust);
+		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdAdjustLapping);
 	}
-public:
 
 	// ----- MDX_GwaArxToolSet_.YanSuanLiangChang command
 	static void MDX_GwaArxToolSet_YanSuanLiangChang(void)
 	{
-		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdBeamLenChck);
+		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdCheckLength);
+	}
+
+	// - MDX_GwaArxToolSet_.WanJin command (do not rename)
+	static void MDX_GwaArxToolSet_WanJin(void)
+	{
+		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdBendBar);
 	}
 };
 
 //-----------------------------------------------------------------------------
 IMPLEMENT_ARX_ENTRYPOINT(CGwaArxToolSetApp)
-
-ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, ts, ts, ACRX_CMD_TRANSPARENT | ACRX_CMD_USEPICKSET | ACRX_CMD_REDRAW, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp,MDX_GwaArxToolSet_, ts, ts,ACRX_CMD_TRANSPARENT | ACRX_CMD_USEPICKSET | ACRX_CMD_REDRAW,NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, TiaoZhengDaJie, TiaoZhengDaJie, ACRX_CMD_TRANSPARENT | ACRX_CMD_USEPICKSET | ACRX_CMD_REDRAW, NULL)
-ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, YanSuanLiangChang, YanSuanLiangChang, ACRX_CMD_TRANSPARENT, NULL) 
+ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, YanSuanLiangChang, YanSuanLiangChang, ACRX_CMD_TRANSPARENT, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, WanJin, WanJin, ACRX_CMD_TRANSPARENT, NULL)
