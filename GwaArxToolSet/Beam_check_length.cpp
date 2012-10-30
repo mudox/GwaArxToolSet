@@ -37,7 +37,7 @@ GwaArx::Beam::_check_length::CBeamCounter::CBeamCounter(
 	unsigned span, unsigned halfSupport, unsigned barDia )
 : m_SpanLength(span), m_SupportHalfWidth(halfSupport), m_BarDia(barDia)
 {
-	GwaArx::Util::VerifyBarDia(barDia);
+	GwaArx::Util::verifyBarDia(barDia);
 }
 
 namespace

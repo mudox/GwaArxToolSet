@@ -8,11 +8,61 @@ namespace GwaArx
 	{
 		namespace _misc
 		{
-			void VerifyBarDia( unsigned dia );			
+			void verifyBarDia( unsigned dia );	
 
-			ads_real * asAdsPoint( AcGePoint3d & p3d );			
+			enum sysvar_bit
+			{	
+				setNULL			= 0,
+				setOSMODE		= 1 << 0,
+				setSNAPMODE		= 1 << 1,
+				setORTHOMODE	= 1 << 2,
+				setALL			= setOSMODE | setSNAPMODE | setORTHOMODE
+			};
 
-			const ads_real * asAdsPoint( const AcGePoint3d & p3d );			
+			class CursorStatusAutoRecorver
+			{
+			public:
+				typedef short int_type;
+
+				enum // OSMODE bits
+				{
+					osNULL	= 0,		// 无 
+					osEND 	= 1,		// END（端点） 
+					osMID 	= 2,		// MID（中点） 
+					osCEN 	= 4,		// CEN（圆心）
+					osNOD 	= 8,		// NOD（节点）
+					osQUA 	= 16,		// QUA（象限点）
+					osINT	= 32,		// INT（交点）
+					osINS 	= 64,		// INS（插入点）
+					osPER 	= 128,		// PER（垂足）
+					osTAN 	= 256,		// TAN（切点）
+					osNEA 	= 512,		// NEA（最近点）
+					osCLR 	= 1024,		// 清除所有对象捕捉
+					osAPP 	= 2048,		// APP（外观交点）
+					osEXT 	= 4096,		// EXT（延伸）
+					osPAR	= 8192		// PAR（平行）
+				};
+
+
+
+			public:
+				CursorStatusAutoRecorver( const sysvar_bit which );
+				~CursorStatusAutoRecorver();
+
+			private:
+				sysvar_bit		m_which;
+				int_type 	m_osMode;
+				int_type 	m_snapMode;
+				int_type 	m_orthoMode;
+				
+			};
+
+			class FreeCursorAWhile : public CursorStatusAutoRecorver
+			{
+			public:
+				FreeCursorAWhile( const sysvar_bit & which );
+				~FreeCursorAWhile();
+			};
 		}
 	}
 }

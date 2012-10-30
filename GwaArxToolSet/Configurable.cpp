@@ -32,7 +32,7 @@ unsigned GwaArx::Configurations::CGwaDataSheet::AnchorageLength_46D( unsigned ba
 
 unsigned GwaArx::Configurations::CGwaDataSheet::LappingLength_46D( unsigned barDia )
 {
-	GwaArx::Util::VerifyBarDia(barDia);
+	GwaArx::Util::verifyBarDia(barDia);
 
 	unsigned ret = 0;
 	switch(barDia)

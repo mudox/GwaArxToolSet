@@ -35,9 +35,9 @@ namespace GwaArx
 			//+ defined ahead.
 			template<typename T_Object> 
 			boost::shared_ptr<T_Object> name2sp(
-				ads_name sname, 
-				AcDb::OpenMode mode =  AcDb::kForRead, 
-				bool openErased = false)
+				const ads_name &	sname, 
+				AcDb::OpenMode		mode		=  AcDb::kForRead, 
+				bool				openErased	= false)
 			{
 				// ads_name ->> acdbObjectId
 				AcDbObjectId id;

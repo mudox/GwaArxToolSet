@@ -6,7 +6,8 @@ namespace GwaArx
 	{
 		namespace _bend_bar
 		{
-			void cmdBendBar( void );
+			void cmdBendBar( void );		
+
 			void cmdBendBarAuto( void );
 		}
 	}

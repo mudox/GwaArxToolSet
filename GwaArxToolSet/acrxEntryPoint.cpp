@@ -72,11 +72,13 @@ public:
 	}
 // ++++++++++++++++++++++++++ ARX Commands ++++++++++++++++++++++++++++++++++++
 public:
+#ifdef GWAARXTOOLSET_DEBUG
 	// ----- MDX_GwaArxToolSet_.ts command
 	static void MDX_GwaArxToolSet_ts(void)
 	{
 		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdBendBar);		
 	}
+#endif	
 
 	// ----- MDX_GwaArxToolSet_.TiaoZhengDaJie command
 	static void MDX_GwaArxToolSet_TiaoZhengDaJie(void)
@@ -99,7 +101,11 @@ public:
 
 //-----------------------------------------------------------------------------
 IMPLEMENT_ARX_ENTRYPOINT(CGwaArxToolSetApp)
+
+#ifdef GWAARXTOOLSET_DEBUG
 ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp,MDX_GwaArxToolSet_, ts, ts,ACRX_CMD_TRANSPARENT | ACRX_CMD_USEPICKSET | ACRX_CMD_REDRAW,NULL)
+#endif
+
 ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, TiaoZhengDaJie, TiaoZhengDaJie, ACRX_CMD_TRANSPARENT | ACRX_CMD_USEPICKSET | ACRX_CMD_REDRAW, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, YanSuanLiangChang, YanSuanLiangChang, ACRX_CMD_TRANSPARENT, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, WanJin, WanJin, ACRX_CMD_TRANSPARENT, NULL)
