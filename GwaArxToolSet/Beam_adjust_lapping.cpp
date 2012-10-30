@@ -38,11 +38,11 @@ namespace
 		for(long n = 0; n != ssLen; ++n)
 		{
 			ret_RTNORM(acedSSName(ss, n, ssLineOrDim));
-			if (spABar = name2SharedPtr<AcDbLine>(ssLineOrDim))
+			if (spABar = name2sp<AcDbLine>(ssLineOrDim))
 			{
 				vecBars.push_back(spABar);
 			}						
-			else if (spADim = name2SharedPtr<AcDbRotatedDimension>(ssLineOrDim))
+			else if (spADim = name2sp<AcDbRotatedDimension>(ssLineOrDim))
 			{
 				vecDims.push_back(spADim);
 			}

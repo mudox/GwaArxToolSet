@@ -12,7 +12,7 @@ GwaArx::TextPatterns::CPatBase::entityPtr(
 	AcDbObjectId id;
 	::curDwg()->getAcDbObjectId(id, false, m_handle);	
 
-	return id2SharedPtr<entity_type>(id, mode, openErased);
+	return id2sp<entity_type>(id, mode, openErased);
 }
 
 std::wstring GwaArx::TextPatterns::CPatBase::Text( void ) const
@@ -95,7 +95,7 @@ GwaArx::TextPatterns::CPatMainBar::_Sentry( const AcDbObjectId & id )
 	do 
 	{
 		// id ->> shared_ptr<AcDbText>
-		BOOST_AUTO(textPtr, id2SharedPtr<AcDbText>(id));
+		BOOST_AUTO(textPtr, id2sp<AcDbText>(id));
 		if(!textPtr)
 		{
 			break;

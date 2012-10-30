@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 
 #include "Configurable.h"
+
 #include "Util.h"
 
 

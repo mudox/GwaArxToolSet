@@ -75,7 +75,7 @@ public:
 	// ----- MDX_GwaArxToolSet_.ts command
 	static void MDX_GwaArxToolSet_ts(void)
 	{
-		GwaArx::Util::InvokeCmdImp(Test1);
+		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdBendBar);		
 	}
 
 	// ----- MDX_GwaArxToolSet_.TiaoZhengDaJie command

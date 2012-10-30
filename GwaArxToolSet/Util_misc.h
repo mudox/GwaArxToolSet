@@ -8,9 +8,7 @@ namespace GwaArx
 	{
 		namespace _misc
 		{
-			void VerifyBarDia( unsigned dia );
-
-			// id, acdbobject *, handle, ads_name transformation routines
+			void VerifyBarDia( unsigned dia );			
 
 			ads_real * asAdsPoint( AcGePoint3d & p3d );			
 

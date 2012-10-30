@@ -6,52 +6,27 @@
 #include "Text.h"
 #include "Beam.h"
 
-void Foo(void);
-
-void Test1( void )
+void JustaTest( void )
 {
-	using namespace GwaArx::Util;
-	using namespace GwaArx::TextPatterns;
-	/******************* test acedPick & acedPickA ******************
-	
+	ads_name n1, n2;
+	ads_point pt1, pt2;
 
-	BOOST_AUTO(p, acedPickA<CPatMainBar>());
-	BOOST_AUTO(dias, p->barDias());
+	ret_RTNORM(::acedEntSel(NULL, n1, pt1));
+	ret_RTNORM(::acedEntSel(NULL, n2, pt2));
 
-	acutPrintf(TEXT("\nYour selection: %s, %d Bar Diameter(s):\tmin:\t%d\tmax:\t%d"), 
-	p->Text().c_str(), dias.size(), p->minmaxBarDia().first, p->minmaxBarDia().second);
-	****************************************************************/
-	
-	/******************** beam length check ************************
-	GwaArx::BeamClac::cmdBeamLenChck();
-	****************************************************************/
+	::acedCommand(RTSTR, TEXT("_.OFFSET"),
+		RTSHORT, 40,
+		RTENAME, n2,
+		RTPOINT, pt1,
+		RTSTR, TEXT(""),
+		RTNONE);
 
-	GwaArx::Beam::cmdAdjustLapping();
-	//Foo();
-	return;
+	ads_name n3;
+	ret_RTNORM(::acdbEntLast(n3));
+
+	::acedCommand(RTSTR, TEXT("_.FILLET"),
+		RTLB, RTENAME, n1, RTPOINT, pt1, RTLE,
+		RTLB, RTENAME, n3, RTPOINT, pt2, RTLE,
+		RTNONE);	
 }
 
-void Foo( void )
-{
-	using namespace GwaArx::Util;
-	using namespace boost;
-
-	BOOST_AUTO(pLine1, acedPick(
-			bind(&id2SharedPtr<AcDbLine>, _1, AcDb::kForWrite, false), 
-			TEXT("\n请点取搭接标注：")));
-	BOOST_AUTO(pLine2, acedPick(
-		bind(&id2SharedPtr<AcDbLine>, _1, AcDb::kForWrite, false), 
-		TEXT("\n请点取搭接标注：")));
-
-	AcGeLine3d Line1(pLine1->startPoint(), pLine1->endPoint());
-	AcGeLine3d Line2(pLine2->startPoint(), pLine2->endPoint());
-
-	if (Line1.isParallelTo(Line2))
-	{
-		acutPrintf(TEXT("\nline1 is colinear to line2"));
-	}
-	else
-	{
-		acutPrintf(TEXT("\nline1 is NOT colinear to line2"));
-	}
-}

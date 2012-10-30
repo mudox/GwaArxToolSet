@@ -2,8 +2,6 @@
 
 #include "StdAfx.h"
 
-#include "Util.h"
-
 namespace GwaArx
 {
 	namespace Util
@@ -12,14 +10,13 @@ namespace GwaArx
 		{
 			/****************************************************************
 			type argument [SentryFunc]:
-				1. must be a callable type with a signature: 
+				1. must be a callable type with a signature as bellow: 
 					[any_type] SentryFunc( const AcDbObjectId & )
 				3. where [any_type] can participate in bool context, e.g.
 					if(any_type), or if(!any_type) ...
 				to denote the SentryFunc invocation is successful or not.
 				4. if any_type is tested to be true, then [any_type] is returned 
-				by copy.
-				5. accepts only 1 argument of type "const AcDbObjectId &".
+				by COPY.				
 			****************************************************************/
 			template<typename SentryFunc>
 			typename boost::result_of<SentryFunc(const AcDbObjectId &)>::type
@@ -56,7 +53,7 @@ namespace GwaArx
 					if(!ret)
 					{
 						acutPrintf(TEXT("\n无效的对象."));
-							continue;
+						continue;
 					}
 
 					// return pick point if required.
@@ -104,10 +101,7 @@ namespace GwaArx
 				{
 					return sp;
 				}				
-			}
-			
-			typedef boost::shared_ptr<struct resbuf> resbuf_sp;
-			resbuf_sp makeResbufShared( struct resbuf * rb );			
+			}						
 
 			class CAcEdSSGet
 			{

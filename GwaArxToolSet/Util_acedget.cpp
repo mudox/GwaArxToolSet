@@ -1,6 +1,8 @@
 #include "StdAfx.h"
 
-#include "Util.h"
+#include "Util_acedget.h"
+#include "Debug.h"
+#include "Util_arx_cmd_helpers.h"
 #include "Configurable.h"
 
 GwaArx::Util::_aced_get::CAcEdSSGet::CAcEdSSGet()
@@ -61,6 +63,7 @@ GwaArx::Util::_aced_get::CAcEdSSGet::setSentry(
 
 void GwaArx::Util::_aced_get::CAcEdSSGet::operator()( ads_name *pSS /*= NULL*/ )
 {
+	using GwaArx::Util::_arx_cmd_helpers::UserCanceled;
 	if (!m_prompt.empty())
 	{		
 		acutPrintf(m_prompt.c_str());
@@ -92,7 +95,7 @@ void GwaArx::Util::_aced_get::CAcEdSSGet::operator()( ads_name *pSS /*= NULL*/ )
 		case RTCAN:
 			// user pressed Esc or Ctrl + C
 			// to cancel the whole command.
-			throw GwaArx::Util::UserCanceled();
+			throw UserCanceled();
 		case RTREJ:
 			xssert(!"RTREJ");
 			throw std::runtime_error(
@@ -110,7 +113,4 @@ void GwaArx::Util::_aced_get::CAcEdSSGet::operator()( ads_name *pSS /*= NULL*/ )
 	}
 }
 
-GwaArx::Util::_aced_get::resbuf_sp GwaArx::Util::_aced_get::makeResbufShared( struct resbuf * rb )
-{
-	return boost::shared_ptr<struct resbuf>(rb, ::acutRelRb);
-}
+
