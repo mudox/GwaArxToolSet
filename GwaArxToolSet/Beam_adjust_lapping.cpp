@@ -212,7 +212,6 @@ namespace
 		using namespace std;
 
 		// figure out who is who among the 4 bars.
-
 		xssert(4 == vec4Bars.size());
 		vector<seg_sp> vec4Segs;
 		for (int i = 0; i != 4; ++i)
@@ -299,22 +298,44 @@ namespace
 		_wiw4Segs(vec4Bars, theOblique, theDropped, theSmaller, theBigger);
 		xssert(theOblique && theDropped && theSmaller && theBigger);
 
-		// build transformation matrix	
+		//  save the far end & near end point of the the smaller and bigger bar
+		//+ for subsequent use.
+		AcGePoint3d biggerBarFarEnd, smallerBarFarEnd;		
+		AcGePoint3d biggerBarNearEnd, smallerBarNearEnd;
+		if ( 
+			theSmaller->startPoint().distanceTo(theOblique->midPoint())
+			< theSmaller->endPoint().distanceTo((theOblique->midPoint()))
+			)
+		{
+			smallerBarFarEnd = theSmaller->endPoint();
+			smallerBarNearEnd = theSmaller->startPoint();
+		}
+		else
+		{
+			smallerBarFarEnd = theSmaller->startPoint();
+			smallerBarNearEnd = theSmaller->endPoint();
+		}
 		
 		// get xAxis.
+		// and save the bigger bar far & near end by the way.
 		AcGeVector3d xAxis;		
 		if ( 
 			theBigger->startPoint().distanceTo(theOblique->midPoint())
 			< theBigger->endPoint().distanceTo((theOblique->midPoint()))
 			)
 		{			
-			xAxis = theBigger->endPoint() - theBigger->startPoint();
+			biggerBarFarEnd = theBigger->endPoint();
+			biggerBarNearEnd = theBigger->startPoint();
+			xAxis = biggerBarFarEnd - theBigger->startPoint();			
 		}
 		else
 		{
-			xAxis = theBigger->startPoint() - theBigger->endPoint();
+			biggerBarFarEnd = theBigger->startPoint();
+			biggerBarNearEnd = theBigger->endPoint();
+			xAxis = biggerBarFarEnd - theBigger->endPoint();
 		}			
 		
+
 		// get origin and yAxis.
 		// the xLinePoint whichever is closer to the referencing RC Text
 		//+ is the 'key point' to locate the origin. 
@@ -349,40 +370,23 @@ namespace
 		yAxis.normalize();
 		zAxis.normalize();
 		trans_mat.setCoordSystem(origin, xAxis, yAxis, zAxis);
-
-		//		for test
-		// 		trans_mat.invert();
-		// 		theBigger->transformBy(trans_mat);
-		// 		theSmaller->transformBy(trans_mat);
-		// 		theOblique->transformBy(trans_mat);
-		// 		theDropped->transformBy(trans_mat);		
-
-		
-		// 		AcGePoint3d pt1 = theBigger->startPoint();
-		// 		AcGePoint3d pt2 = theBigger->endPoint();
-		// 		AcGePoint3d pt3 = theSmaller->startPoint();
-		// 		AcGePoint3d pt4 = theSmaller->endPoint();
-		// 		AcGePoint3d pt5 = theDropped->startPoint();
-		// 		AcGePoint3d pt6 = theDropped->endPoint();
 		
 	 	// build virtual layout.
 		// i.e. calculate virtual points.
-		double theBiggerLen = theBigger->length();
-		double theSmallerLen = theSmaller->length();
+
 		double theDroppedDepth = theBigger->distanceTo(*theDropped);
 		double theBiggerSmallerNetSapce = 
-			::abs(theBigger->midPoint().distanceTo(theSmaller->midPoint())) -
-			(theBiggerLen + theSmallerLen) / 2;
+			::abs(biggerBarNearEnd.distanceTo(smallerBarNearEnd));
 		double theDroppedLen = spDim->xLine1Point().distanceTo(spDim->xLine2Point());
 
 		theBigger = make_shared<AcGeLineSeg3d>(
 			AcGePoint3d(0, 0, 0),
-			AcGePoint3d(theBiggerLen, 0, 0)
+			AcGePoint3d(1, 0, 0) // useless, use the pre-saved biggerBarFarEnd instead. 
 			);
 
 		theSmaller = make_shared<AcGeLineSeg3d>(
 			AcGePoint3d(-theBiggerSmallerNetSapce, 0, 0),
-			AcGePoint3d(-(theBiggerSmallerNetSapce + theSmallerLen), 0, 0)
+			AcGePoint3d(-(theBiggerSmallerNetSapce + 1), 0, 0) // useless, use the pre-saved smallerBarFarEnd instead.
 			);
 		
 		theDropped = make_shared<AcGeLineSeg3d>(
@@ -408,9 +412,9 @@ namespace
 		}
 
 		vec4Bars[0]->setStartPoint(theBigger->startPoint());
-		vec4Bars[0]->setEndPoint(theBigger->endPoint());
+		vec4Bars[0]->setEndPoint(biggerBarFarEnd);
 		vec4Bars[1]->setStartPoint(theSmaller->startPoint());
-		vec4Bars[1]->setEndPoint(theSmaller->endPoint());
+		vec4Bars[1]->setEndPoint(smallerBarFarEnd);
 		vec4Bars[2]->setStartPoint(theDropped->startPoint());
 		vec4Bars[2]->setEndPoint(theDropped->endPoint());
 		vec4Bars[3]->setStartPoint(theOblique->startPoint());

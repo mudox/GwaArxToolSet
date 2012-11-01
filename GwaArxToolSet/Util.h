@@ -6,6 +6,7 @@
 #include "Util_misc.h"
 #include "Util_string_cast.h"
 #include "Util_arx_cmd_helpers.h"
+#include "Util_sysvar_savers.h"
 
 // global inline routine to get current dwg's AcDbDatabase *
 inline AcDbDatabase * curDwg( void )
@@ -22,6 +23,7 @@ namespace GwaArx
 		using namespace GwaArx::Util::_misc;
 		using namespace GwaArx::Util::_string_cast;
 		using namespace GwaArx::Util::_arx_cmd_helpers;
+		using namespace GwaArx::Util::_sysvar_savers;
 	}
 }
 

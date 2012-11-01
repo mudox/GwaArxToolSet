@@ -98,9 +98,15 @@ namespace
 		const ads_name	& 	barName,
 		const ads_point	& 	barPickPt, 
 		const ads_name	& 	refLineName,		 
-		const ads_point	& 	refLinePickPt )
+		const ads_point	& 	refLinePickPt,
+		short				anchorLength = -1
+		)
 	{
 		using namespace GwaArx::Util;
+		
+		// verify arguments.
+		xssert(anchorLength > 0 || -1 == anchorLength);
+		xssert((&barPickPt) && (&refLinePickPt) && (&barName) && (&refLineName));
 
 		// figure out the offset distance.
 		unsigned offsetDistance = _determineOffsetDistantce(refLineName);
@@ -133,23 +139,26 @@ namespace
 		FreeCursorAWhile _close_os_snap_mode_a_while(
 			static_cast<sysvar_bit>(setORTHOMODE | setSNAPMODE));
 
+		const unsigned short defaultAnchorLength = 500; // this can be configurable.
 		::acedCommand(RTSTR, TEXT("_.LENGTHEN"),
 			RTSTR, TEXT("_T"),
-			RTSHORT, 500,	// default length 
+			RTSHORT, (anchorLength < 0) ? defaultAnchorLength : anchorLength,	
 			RTLB, RTENAME, anchorSegName, RTPOINT, lengthenPoint, RTLE,
 			RTSTR, TEXT(""),
 			RTNONE);
+		
+		if (anchorLength < 0)
+		{
+			// recalculation is necessary because the line length is changed.
+			_determineLenthenEnd(anchorSegName, barPickPt, lengthenPoint);
 
-		// recalculation is necessary because the line length is changed.
-		_determineLenthenEnd(anchorSegName, barPickPt, lengthenPoint);
-
-
-		::acedCommand(RTSTR, TEXT("_.LENGTHEN"),
-			RTSTR, TEXT("_DY"),		
-			RTLB, RTENAME, anchorSegName, RTPOINT, lengthenPoint, RTLE,
-			RTSTR, PAUSE,
-			RTSTR, TEXT(""),
-			RTNONE);
+			::acedCommand(RTSTR, TEXT("_.LENGTHEN"),
+				RTSTR, TEXT("_DY"),		
+				RTLB, RTENAME, anchorSegName, RTPOINT, lengthenPoint, RTLE,
+				RTSTR, PAUSE,
+				RTSTR, TEXT(""),
+				RTNONE);
+		}	
 	}
 }
 
