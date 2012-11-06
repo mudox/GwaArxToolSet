@@ -76,17 +76,17 @@ public:
 	// ----- MDX_GwaArxToolSet_.ts command
 	static void MDX_GwaArxToolSet_ts(void)
 	{
-		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdBendBar);		
+		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdBendBarsAuto);		
 	}
 #endif	
 
-	// ----- MDX_GwaArxToolSet_.TiaoZhengDaJie command
+	// ----- MDX_GwaArxToolSet_.TiaoZhengDaJie command (do not rename)
 	static void MDX_GwaArxToolSet_TiaoZhengDaJie(void)
 	{
 		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdAdjustLapping);
 	}
 
-	// ----- MDX_GwaArxToolSet_.YanSuanLiangChang command
+	// ----- MDX_GwaArxToolSet_.YanSuanLiangChang command (do not rename)
 	static void MDX_GwaArxToolSet_YanSuanLiangChang(void)
 	{
 		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdCheckLength);
@@ -95,7 +95,13 @@ public:
 	// - MDX_GwaArxToolSet_.WanJin command (do not rename)
 	static void MDX_GwaArxToolSet_WanJin(void)
 	{
-		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdBendBar);
+		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdBendABar);
+	}
+
+	// - MDXGwaArxToolSet_.ZiDongWanJin command (do not rename)
+	static void MDXGwaArxToolSet_ZiDongWanJin(void)
+	{
+		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdBendBarsAuto);
 	}
 };
 
@@ -109,3 +115,4 @@ ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp,MDX_GwaArxToolSet_, ts, ts,ACRX_CMD
 ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, TiaoZhengDaJie, TiaoZhengDaJie, ACRX_CMD_TRANSPARENT | ACRX_CMD_USEPICKSET | ACRX_CMD_REDRAW, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, YanSuanLiangChang, YanSuanLiangChang, ACRX_CMD_TRANSPARENT, NULL)
 ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDX_GwaArxToolSet_, WanJin, WanJin, ACRX_CMD_TRANSPARENT, NULL)
+ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp, MDXGwaArxToolSet_, ZiDongWanJin, ZiDongWanJin, ACRX_CMD_TRANSPARENT, NULL)

@@ -2,6 +2,11 @@
 
 #include "StdAfx.h"
 
+#define __AND -4, TEXT("<AND")
+#define DNA__ -4, TEXT("AND>")
+#define __OR -4, TEXT("<OR")
+#define RO__ -4, TEXT("OR>")
+
 namespace GwaArx
 {
 	namespace Util
@@ -86,7 +91,8 @@ namespace GwaArx
 				boost::function<bool (typename Wanted::shared_ptr_type)> Pred	// default parameter
 				= boost::function<bool (typename Wanted::shared_ptr_type)>())	//  ¡ª¡ª a empty function object
 			{
-				typename Wanted::shared_ptr_type sp = acedPick(&typename Wanted::newInstance, szPrompt);
+				typename Wanted::shared_ptr_type sp = acedPick(
+					&typename Wanted::newInstance, szPrompt);
 
 				if (!sp || Pred.empty())
 				{

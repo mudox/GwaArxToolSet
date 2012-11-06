@@ -8,6 +8,8 @@ namespace GwaArx
 	{
 		namespace _arx_shared_ptr 
 		{
+			typedef boost::shared_ptr<AcDbLine> dbline_sp;
+
 			//	apply acdbOpenOject() to acdbObjectId argument, if succeeded, wrap the returned
 			//+ pointer which refers to the underlying acdbOject descendant in boost::shared_ptr,
 			//+ else return an empty boost::shared_ptr ( which in boolean context, evaluates to 
@@ -23,11 +25,13 @@ namespace GwaArx
 				Acad::ErrorStatus es = acdbOpenObject(p, id, mode, openErased);
 				if( Acad::eOk == es )
 				{
-					return boost::shared_ptr<T_Object>(p, std::mem_fun(&T_Object::close));	
+					return boost::shared_ptr<T_Object>(p, 
+						std::mem_fun(&T_Object::close));	
 				}
 				else
 				{	
-					return boost::shared_ptr<T_Object>();
+					// return a null ptr in failure
+					return boost::shared_ptr<T_Object>(); 
 				}
 			}
 
@@ -41,7 +45,11 @@ namespace GwaArx
 			{
 				// ads_name ->> acdbObjectId
 				AcDbObjectId id;
-				ret_eOk(acdbGetObjectId(id, sname));
+				if (Acad::eOk != acdbGetObjectId(id, sname))
+				{
+					// return null ptr in failure.
+					return boost::shared_ptr<T_Object>();
+				}
 
 				// acdbObjectId ->> shared_ptr<T_Object>
 				return id2sp<T_Object>(id, mode, openErased);

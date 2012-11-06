@@ -28,7 +28,8 @@ namespace GwaArx
 			************************************/
 			void esCall( Acad::ErrorStatus err );
 
-			// 1 byte empty exception class to indicate user has canceled[press ESC or Ctrl + C].
+			// 1 byte empty exception class to indicate that user has canceled
+			// (press ESC or Ctrl + C).
 			struct UserCanceled
 			{			
 			};

@@ -1,8 +1,6 @@
 #include "StdAfx.h"
 
-#include "Util_acedget.h"
-#include "Debug.h"
-#include "Util_arx_cmd_helpers.h"
+#include "Util.h"
 #include "Configurable.h"
 
 GwaArx::Util::_aced_get::CAcEdSSGet::CAcEdSSGet()
@@ -12,9 +10,9 @@ GwaArx::Util::_aced_get::CAcEdSSGet::CAcEdSSGet()
 	
 	/****************************************************************
 	post condition:
-		all wstring type hold an empty string (i.e. L"").
+		all wstring type hold an empty string (i.e. wstring.empty() yields true).
 		all pointer & array type got NULL.
-		boost::function got an empty (i.e. m_sentry.empty() yield true).
+		boost::function got an empty (i.e. m_sentry.empty() yields true).
 	****************************************************************/	
 }
 
@@ -63,7 +61,8 @@ GwaArx::Util::_aced_get::CAcEdSSGet::setSentry(
 
 void GwaArx::Util::_aced_get::CAcEdSSGet::operator()( ads_name *pSS /*= NULL*/ )
 {
-	using GwaArx::Util::_arx_cmd_helpers::UserCanceled;
+	using GwaArx::Util::UserCanceled;
+
 	if (!m_prompt.empty())
 	{		
 		acutPrintf(m_prompt.c_str());
@@ -71,6 +70,10 @@ void GwaArx::Util::_aced_get::CAcEdSSGet::operator()( ads_name *pSS /*= NULL*/ )
 
 	int rt = RTERROR;
 	bool bOk = false;
+#ifdef GWAARXTOOLSET_DEBUG
+	resbuf rb = {NULL, RTSHORT, 0};
+	short errNo = 0;
+#endif
 	do 
 	{
 		rt = acedSSGet((m_str.empty() ? NULL : m_str.c_str()),
@@ -89,6 +92,14 @@ void GwaArx::Util::_aced_get::CAcEdSSGet::operator()( ads_name *pSS /*= NULL*/ )
 			}
 			break;
 		case RTERROR:
+#ifdef GWAARXTOOLSET_DEBUG		
+			//  the "ERRNO" system variable indicates the reason for the failure.
+			//  check out the "¡¶AutoLISP Developer's Guide¡·- Appendixes - AutoLISP
+			//+ Error Codes" for detail information.
+			ret_RTNORM(::acedGetVar(TEXT("ERRNO"), &rb));
+			errNo = rb.resval.rint;			
+#endif
+			
 			// user pressed space or enter
 			// when nothing selected.		
 			break;
