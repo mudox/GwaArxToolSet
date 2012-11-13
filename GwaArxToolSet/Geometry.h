@@ -6,7 +6,7 @@ namespace GwaArx
 {
 	namespace Geometry
 	{		
-		bool isVertical(GwaArx::Util::dbline_sp line);
-		bool isHorizontal(GwaArx::Util::dbline_sp line);		
+		bool isVertical(dbline_sp line);
+		bool isHorizontal(dbline_sp line);		
 	}
 }

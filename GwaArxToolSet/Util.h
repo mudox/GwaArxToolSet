@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Debug.h"
+#include "Util_typedefs.h"
 #include "Util_arx_shared_ptr.h" 
 #include "Util_acedget.h"
 #include "Util_misc.h"

@@ -72,10 +72,11 @@ public:
 	}
 // ++++++++++++++++++++++++++ ARX Commands ++++++++++++++++++++++++++++++++++++
 public:
-#ifdef GWAARXTOOLSET_DEBUG
+#ifdef MDX_DEBUG
 	// ----- MDX_GwaArxToolSet_.ts command
 	static void MDX_GwaArxToolSet_ts(void)
 	{
+		//JustaTest();
 		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdBendBarsAuto);		
 	}
 #endif	
@@ -108,7 +109,7 @@ public:
 //-----------------------------------------------------------------------------
 IMPLEMENT_ARX_ENTRYPOINT(CGwaArxToolSetApp)
 
-#ifdef GWAARXTOOLSET_DEBUG
+#ifdef MDX_DEBUG
 ACED_ARXCOMMAND_ENTRY_AUTO(CGwaArxToolSetApp,MDX_GwaArxToolSet_, ts, ts,ACRX_CMD_TRANSPARENT | ACRX_CMD_USEPICKSET | ACRX_CMD_REDRAW,NULL)
 #endif
 

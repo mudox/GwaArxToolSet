@@ -70,7 +70,7 @@ void GwaArx::Util::_aced_get::CAcEdSSGet::operator()( ads_name *pSS /*= NULL*/ )
 
 	int rt = RTERROR;
 	bool bOk = false;
-#ifdef GWAARXTOOLSET_DEBUG
+#ifdef MDX_DEBUG
 	resbuf rb = {NULL, RTSHORT, 0};
 	short errNo = 0;
 #endif
@@ -92,7 +92,7 @@ void GwaArx::Util::_aced_get::CAcEdSSGet::operator()( ads_name *pSS /*= NULL*/ )
 			}
 			break;
 		case RTERROR:
-#ifdef GWAARXTOOLSET_DEBUG		
+#ifdef MDX_DEBUG		
 			//  the "ERRNO" system variable indicates the reason for the failure.
 			//  check out the "¡¶AutoLISP Developer's Guide¡·- Appendixes - AutoLISP
 			//+ Error Codes" for detail information.

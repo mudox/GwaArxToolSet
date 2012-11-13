@@ -9,14 +9,12 @@ namespace
 {
 	enum sel_type { invalidSelType, onlyLappingLine, onlyDim, both };
 
-	typedef	GwaArx::TextPatterns::CPatMainBar::shared_ptr_type		rc_sp;
-	typedef boost::shared_ptr<AcDbRotatedDimension> 				dim_sp;
-	typedef boost::shared_ptr<AcDbLine>								bar_sp;
-	typedef std::vector<bar_sp>										bar_sp_vec;
+	typedef	GwaArx::TextPatterns::CPatMainBar::shared_ptr_type		rc_sp;	
+	typedef std::vector<dbline_sp>									dbline_sp_vec;
 	typedef boost::shared_ptr<AcGeLineSeg3d>						seg_sp;
 	typedef std::vector<seg_sp>										seg_sp_vec;
 
-	bool _ssSentry( ads_name ss, sel_type & selType, dim_sp & spDim, bar_sp_vec & vecBars )
+	bool _ssSentry( ads_name ss, sel_type & selType, dbdim_sp & spDim, dbline_sp_vec & vecBars )
 	{
 		using namespace GwaArx::Util;
 
@@ -31,9 +29,9 @@ namespace
 		}
 
 		ads_name ssLineOrDim;		
-		std::vector<dim_sp> vecDims;
-		bar_sp spABar;
-		dim_sp spADim;		
+		std::vector<dbdim_sp> vecDims;
+		dbline_sp spABar;
+		dbdim_sp spADim;		
 
 		for(long n = 0; n != ssLen; ++n)
 		{
@@ -76,7 +74,7 @@ namespace
 		return true;
 	}
 
-	sel_type _getInput( rc_sp & spRC, dim_sp & spDim, bar_sp_vec & vecBars )
+	sel_type _getInput( rc_sp & spRC, dbdim_sp & spDim, dbline_sp_vec & vecBars )
 	{			
 		using namespace boost;
 		using namespace GwaArx::Util;
@@ -115,7 +113,7 @@ namespace
 		return selType;
 	}
 
-	void _caseOnlyDim( rc_sp spRC, dim_sp spDim )
+	void _caseOnlyDim( rc_sp spRC, dbdim_sp spDim )
 	{
 		using namespace GwaArx::Configurations;
 
@@ -158,11 +156,11 @@ namespace
 		spDim->setXLine2Point(pt2);
 	}
 	
-	void _caseOnlyLappingBar( rc_sp spRC, bar_sp_vec vecBars )
+	void _caseOnlyLappingBar( rc_sp spRC, dbline_sp_vec vecBars )
 	{
 		using namespace GwaArx::Configurations;
 
-		bar_sp spBar = vecBars[0];
+		dbline_sp spBar = vecBars[0];
 
 		AcGePoint3d pt1 = spBar->startPoint();
 		AcGePoint3d pt2 = spBar->endPoint();
@@ -203,7 +201,7 @@ namespace
 		spBar->setEndPoint(pt2);
 	}
 
-	inline void _wiw4Segs(bar_sp_vec &vec4Bars, seg_sp &obliqueSeg, seg_sp &droppedSeg,
+	inline void _wiw4Segs(dbline_sp_vec &vec4Bars, seg_sp &obliqueSeg, seg_sp &droppedSeg,
 		seg_sp &smallerSeg, seg_sp &biggerSeg)
 	{
 		using namespace GwaArx::Configurations;
@@ -279,7 +277,7 @@ namespace
 		}		
 	}
 
-	void _caseBoth( rc_sp spRC, dim_sp spDim, bar_sp_vec vec4Bars )
+	void _caseBoth( rc_sp spRC, dbdim_sp spDim, dbline_sp_vec vec4Bars )
 	{
 		xssert(4 == vec4Bars.size());		
 
@@ -426,8 +424,8 @@ void GwaArx::Beam::_adjust_lapping::cmdAdjustLapping( void )
 {
 	// prompt user to select objects
 	rc_sp spRC;
-	dim_sp spDim;
-	bar_sp_vec vecBars;
+	dbdim_sp spDim;
+	dbline_sp_vec vecBars;
 
 	switch(_getInput(spRC, spDim, vecBars))
 	{
