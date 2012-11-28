@@ -9,13 +9,13 @@ typedef def_sp(AcDbObject)			 	dbobj_sp;
 typedef def_sp(AcDbLine)				dbline_sp;
 typedef def_sp(AcDbArc)					dbarc_sp;			
 typedef def_sp(AcDbRotatedDimension)	dbdim_sp;
+typedef def_sp(AcDb2dPolyline)			db2dpline_sp;
 
 typedef def_sp(AcDbBlockTable)			bt_sp;
 typedef def_sp(AcDbBlockTableRecord)	btr_sp;
 
-typedef def_sp(resbuf)					rb_sp;	
-typedef def_sp(ACHAR)					acharbuf_sp;
-
+typedef def_sp(resbuf)					heap_rb_sp;	
+typedef def_sp(ACHAR)					heap_str_sp;
 
 #undef def_sp
 

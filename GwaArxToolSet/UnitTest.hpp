@@ -3,15 +3,28 @@
 #include "StdAfx.h"
 
 #include "Util.h"
-#include "Text.h"
-#include "Beam.h"
-#include "Draw.h"
+
+#include "OverKill.h"
 
 void JustaTest( void )
 {
-	static bool t = false;
+	using namespace GwaArx::Util;
+
+ 	ads_name name;
+ 	ads_point ignore;
+ 	ret_RTNORM(::acedEntSel(TEXT("选一条直线："), name, ignore));
 	
-	AcDbAppSystemVariables a;
-	a.setOsmode(t = !t ? 0 : 1983);
+ 	BOOST_AUTO(line, name2sp<AcDbLine>(name));
+ 	if (line)
+ 	{
+		xssert(line.unique());
+ 		line.reset();		
+
+		GwaArx::OverKill::okLine(name2id(name));
+ 	}	
+ 	else
+ 	{
+ 		acutPrintf(TEXT("*需要一条直线"));
+ 	}
 }
 

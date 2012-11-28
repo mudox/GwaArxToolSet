@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 
-#include "Debug.h"
+#include "GAT_Debug.h"
 
 #ifdef MDX_DEBUG
 Acad::ErrorStatus	___GwaArx___ErrorStatus___ = Acad::eOk;

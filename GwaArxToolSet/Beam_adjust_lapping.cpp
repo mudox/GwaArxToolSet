@@ -98,12 +98,12 @@ namespace
 		xssert(ssFilter);
 
 		sel_type selType = invalidSelType;
-		GwaArx::Util::CAcEdSSGet ssget;
+		GwaArx::Util::CSSGet ssget;
 		ssget
 			.setPrompt(TEXT("\n请选择 [要调整长度的那一条钢筋 / 要调整长度的那一个标注对象 / ")
 			TEXT("四条钢筋 + 标注对象]："))
 			.setFilter(ssFilter)
-			.setSentry(boost::bind(_ssSentry, _1, ref(selType), ref(spDim), ref(vecBars)));
+			.setSentry(BOOST_BIND(_ssSentry, _1, ref(selType), ref(spDim), ref(vecBars)));
 		ssget();	
 
 		// pick the reference RC text.

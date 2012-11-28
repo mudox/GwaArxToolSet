@@ -1,8 +1,12 @@
 #pragma once
 
-#include "Util_arx_cmd_helpers.h"
+#include <acadstrc.h>
 
+
+
+//////////////////////////////////////////////////////////////////////////
 // when configuring debug version of project property, make sure to set /D "MDX_DEBUG
+//////////////////////////////////////////////////////////////////////////
 
 #ifdef MDX_DEBUG
 #define xssert(expr) ((!!(expr)) || (__debugbreak(), 0))
@@ -27,21 +31,21 @@ extern int ___GwaArx___RT___;
 #endif
 
 #ifdef MDX_DEBUG
-#define MDX_DBG(fn) do { (fn); } while (0)
+#define MDX_ON_DBG(fn) do { (fn); } while (0)
 #else
-#define MDX_DBG(fn)
+#define MDX_ON_DBG(fn) 
 #endif
 
-#ifdef MDX_DBG
-#define MDX_PAUSE_HERE(prompt) do { GwaArx::Debug::acedPause(prompt); } while (0)
+#ifdef MDX_DEBUG
+#define MDX_PAUSE_ON_DGB(prompt) do { GwaArx::Debug::acedPause(prompt); } while (0)
 #else
-#define MDX_PAUSE_HERE(prompt)
+#define MDX_PAUSE_ON_DGB(prompt)
 #endif
 
 namespace GwaArx
 {
 	namespace Debug
 	{
-		void acedPause(std::wstring pompt);
+		void acedPause(std::wstring prompt);
 	}
 }

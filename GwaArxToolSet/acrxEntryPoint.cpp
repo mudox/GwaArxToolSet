@@ -76,8 +76,7 @@ public:
 	// ----- MDX_GwaArxToolSet_.ts command
 	static void MDX_GwaArxToolSet_ts(void)
 	{
-		//JustaTest();
-		GwaArx::Util::InvokeCmdImp(GwaArx::Beam::cmdBendBarsAuto);		
+		JustaTest();				
 	}
 #endif	
 

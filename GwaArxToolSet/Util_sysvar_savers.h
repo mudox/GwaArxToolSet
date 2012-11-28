@@ -2,6 +2,17 @@
 
 #include "StdAfx.h"
 
+#define  SUPRESS_ORTHO_SNAP_MODE_A_WHILE GwaArx::Util::FreeCursorAWhile \
+_close_ortho_snap_mode_a_while_ (static_cast<GwaArx::Util::sysvar_bit>(\
+	GwaArx::Util::setORTHOMODE | \
+	GwaArx::Util::setSNAPMODE))
+
+#define  SUPRESS_ORTHO_SNAP_OS_MODE_A_WHILE GwaArx::Util::FreeCursorAWhile \
+_close_os_snap_ortho_mode_a_while_ (static_cast<GwaArx::Util::sysvar_bit>(\
+	GwaArx::Util::setORTHOMODE | \
+	GwaArx::Util::setSNAPMODE | \
+	GwaArx::Util::setOSMODE))
+
 namespace GwaArx
 {
 	namespace Util

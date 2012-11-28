@@ -2,10 +2,14 @@
 
 #include "StdAfx.h"
 
+#define __NOT -4, TEXT("<NOT")
+#define TON__ -4, TEXT("NOT>")
 #define __AND -4, TEXT("<AND")
 #define DNA__ -4, TEXT("AND>")
 #define __OR -4, TEXT("<OR")
 #define RO__ -4, TEXT("OR>")
+#define _QE_ -4, TEXT("=")
+#define _NOTEQ_ -4, TEXT("!=")
 
 namespace GwaArx
 {
@@ -109,28 +113,25 @@ namespace GwaArx
 				}				
 			}						
 
-			class CAcEdSSGet
+			class CSSGet
 			{
 			public:
 				typedef boost::function<bool( ads_name )> sentry_type;
 				//constructors
 			public:
-				CAcEdSSGet();			
+				CSSGet();			
 
 			public:				
-				CAcEdSSGet & setPrompt	( const std::wstring & prompt );
-				CAcEdSSGet & setStr		( const std::wstring & str );
-				CAcEdSSGet & setPt1		( void * pt1 );				
-				CAcEdSSGet & setPt2		( void * pt2 );				
-				CAcEdSSGet & setFilter	( struct resbuf * filter );
-				CAcEdSSGet & setSS		( ads_name ss );
-				CAcEdSSGet & setSentry	( sentry_type sentry);
+				CSSGet & setPrompt	( const std::wstring & prompt );
+				CSSGet & setStr		( const std::wstring & str );
+				CSSGet & setPt1		( void * pt1 );				
+				CSSGet & setPt2		( void * pt2 );				
+				CSSGet & setFilter	( struct resbuf * filter );
+				CSSGet & setSS		( ads_name ss );
+				CSSGet & setSentry	( sentry_type sentry);				
 
 			public:
-				
-
-			public:
-				void operator() ( ads_name *pSS = NULL );
+				void operator()( void );
 
 			private:
 				std::wstring	m_prompt;
@@ -138,8 +139,8 @@ namespace GwaArx
 				void			*m_pt1;
 				void			*m_pt2;
 				struct resbuf	*m_filter;
-				ads_name		m_ss;
 				sentry_type		m_sentry;
+				ads_namep		m_ss;
 			};				
 		} // namespace _aced_get
 	} // namespace Util

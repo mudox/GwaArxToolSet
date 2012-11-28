@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 
-#include "Util_misc.h"
+#include "Util.h"
 #include "Configurable.h"
 
 #include <strsafe.h>
@@ -14,3 +14,37 @@ void GwaArx::Util::_misc::verifyBarDia( unsigned dia )
 	}	
 }
 
+AcDbObjectId GwaArx::Util::_misc::name2id( const ads_name name )
+{
+	AcDbObjectId id;
+	ret_eOk(::acdbGetObjectId(id, name));
+	return id;
+}
+
+heap_str_sp GwaArx::Util::_misc::id2handleStrBufSp( AcDbObjectId id )
+{
+	BOOST_AUTO(sp, id2sp<AcDbObject>(id));
+	xssert(sp);
+
+	AcDbHandle handle;
+	sp->getAcDbHandle(handle);	
+	xssert(!handle.isNull());
+	
+	heap_str_sp handleStrBufSp = heap_str2sp(new ACHAR[17]);
+	handle.getIntoAsciiBuffer(handleStrBufSp.get());
+
+	return handleStrBufSp;
+}
+
+void GwaArx::Util::_misc::ssHighlight( const ads_name ss )
+{
+	long ssLen;
+	ret_RTNORM(::acedSSLength(ss, &ssLen));
+
+	ads_name name;
+	for (int n = 0; n != ssLen; ++n)
+	{		
+		ret_RTNORM(::acedSSName(ss, n, name));
+		ret_RTNORM(::acedRedraw(name, 3));
+	}
+}

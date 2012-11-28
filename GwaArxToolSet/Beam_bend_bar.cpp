@@ -19,7 +19,7 @@ namespace
 	bool _isBar( dbline_sp theLine )
 	{
 		using namespace GwaArx::Util;
-		acharbuf_sp layerName = achar2sp(theLine->layer());
+		heap_str_sp layerName = heap_str2sp(theLine->layer());
 
 		if(std::wstring(TEXT("MAINBAR")) == std::wstring(layerName.get()))
 		{			
@@ -477,7 +477,7 @@ namespace
 			RTNONE);
 		xssert(ssFilter);		
 
-  		GwaArx::Util::CAcEdSSGet ssget;
+  		GwaArx::Util::CSSGet ssget;
   		ssget
   			.setPrompt(TEXT("\n需要选取至少一条水平顶筋，至少一条水平底筋，以及一条")
  				TEXT("（且只能是一条竖直的梁轮廓参考线）："))
@@ -558,6 +558,7 @@ void GwaArx::Beam::_bend_bar::cmdBendABar( void )
 
 void GwaArx::Beam::_bend_bar::cmdBendBarsAuto( void )
 {
+	using namespace GwaArx::Util;
 	// ****************** Step 1 *********************
 	//  get input
 	//+ while in _getInput(), selection set is searched for significant object and
@@ -592,7 +593,8 @@ void GwaArx::Beam::_bend_bar::cmdBendBarsAuto( void )
 	double pickPtX = 
 		refLine->endPoint().x;
 	ads_point pickPtOnRefLine = {pickPtX, pickPtY, 0.0};
-	MDX_DBG(GwaArx::Draw::aPoint(*(AcGePoint3d *)pickPtOnRefLine));	
+
+	MDX_ON_DBG(GwaArx::Draw::aPoint(*(AcGePoint3d *)pickPtOnRefLine));	
 	
 	// wrap auto variables predefined before loop.
   	{
@@ -622,7 +624,8 @@ void GwaArx::Beam::_bend_bar::cmdBendBarsAuto( void )
   				//+ the reference line).
   				barLineSeg.set(topBars[n]->startPoint(), topBars[n]->endPoint());  				
 				pickPtOnBar = barLineSeg.midPoint();
- 				MDX_DBG(GwaArx::Draw::aPoint(pickPtOnBar));  
+
+ 				MDX_ON_DBG(GwaArx::Draw::aPoint(pickPtOnBar));  
 
   				// calculates anchor length.
   				anchorLength = _clacAnchorLength(maxBarSpacing, topBars.size(), 
@@ -631,10 +634,12 @@ void GwaArx::Beam::_bend_bar::cmdBendBarsAuto( void )
   				if (0 == n)
   				{
 					// release shared_ptr occupation.
-					xssert(1 == topBars[n].use_count());
-					topBars[n].reset();					
-					xssert(1 == refLine.use_count());
-					refLine.reset();
+// 					xssert(1 == topBars[n].use_count());
+// 					topBars[n].reset();					
+// 					xssert(1 == refLine.use_count());
+// 					refLine.reset();
+ 					dbSpClose(topBars[n]);
+					dbSpClose(refLine);
 
   					_doBendaBar(
 						name, (ads_real *)&pickPtOnBar, 
@@ -665,7 +670,9 @@ void GwaArx::Beam::_bend_bar::cmdBendBarsAuto( void )
   				// see above if{..}
   				barLineSeg.set(bottomBars[n]->startPoint(), bottomBars[n]->endPoint());  				
 				pickPtOnBar = barLineSeg.midPoint();
-  				MDX_DBG(GwaArx::Draw::aPoint(pickPtOnBar)); 
+
+  				MDX_ON_DBG(GwaArx::Draw::aPoint(pickPtOnBar)); 
+
   				//calculate anchor length.
 				anchorLength = _clacAnchorLength(maxBarSpacing, topBars.size(), 
 					bottomBars.size(), n); 
